@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
+
 
 namespace Brush_Tool
 {
@@ -22,6 +24,7 @@ namespace Brush_Tool
         Mat imgMain = new Mat();
         Mat imgMainCopy = new Mat();
         Mat blackImg = new Mat();
+        Mat binaryMask = new Mat();
 
         int idx = 0;
         int actualX = 0;
@@ -68,6 +71,7 @@ namespace Brush_Tool
                 imgMain = new Mat(folderContents[idx]);
                 imgMain.CopyTo(imgMainCopy);
                 blackImg = new Mat(imgMain.Rows, imgMain.Cols, MatType.CV_8UC1, Scalar.Black);
+                binaryMask = new Mat(imgMain.Rows, imgMain.Cols, MatType.CV_8UC1, Scalar.Black);
                 pb_imgDisplay.Image = imgMain.ToBitmap();
                 pb_imgDisplay.SizeMode = PictureBoxSizeMode.AutoSize;
             }
@@ -104,6 +108,7 @@ namespace Brush_Tool
                 imgMain = new Mat(folderContents[idx]);
                 imgMain.CopyTo(imgMainCopy);
                 blackImg = new Mat(imgMain.Rows, imgMain.Cols, MatType.CV_8UC1, Scalar.Black);
+                binaryMask = new Mat(imgMain.Rows, imgMain.Cols, MatType.CV_8UC1, Scalar.Black);
                 pb_imgDisplay.Image = imgMain.ToBitmap();
                 pb_imgDisplay.SizeMode = PictureBoxSizeMode.AutoSize;
             }
@@ -140,6 +145,7 @@ namespace Brush_Tool
                 imgMain = new Mat(folderContents[idx]);
                 imgMain.CopyTo(imgMainCopy);
                 blackImg = new Mat(imgMain.Rows, imgMain.Cols, MatType.CV_8UC1, Scalar.Black);
+                binaryMask = new Mat(imgMain.Rows, imgMain.Cols, MatType.CV_8UC1, Scalar.Black);
                 pb_imgDisplay.Image = imgMain.ToBitmap();
                 pb_imgDisplay.SizeMode = PictureBoxSizeMode.AutoSize;
             }
@@ -177,12 +183,19 @@ namespace Brush_Tool
                         Cv2.Circle(imgMain, new OpenCvSharp.Point(actualX, actualY), (int)nud_brushSize.Value, Scalar.Red, -1);
 
                     Cv2.Circle(blackImg, new OpenCvSharp.Point(actualX, actualY), (int)nud_brushSize.Value, Scalar.White, -1);
+                    if (cb_saveMask.Checked)
+                        Cv2.Circle(binaryMask, new OpenCvSharp.Point(actualX, actualY), (int)nud_brushSize.Value, Scalar.White, -1);
                     pb_imgDisplay.Image = imgMain.ToBitmap();
+                    pb_imgDisplay.Invalidate();
+                    GC.Collect();
                 }
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
+                btn_saveFinalText.PerformClick();
+                pb_imgDisplay.Image = imgMain.ToBitmap();
+                Console.WriteLine(exc.Message);
+                //MessageBox.Show(exc.Message);
             }
         }
 
@@ -190,6 +203,7 @@ namespace Brush_Tool
         {
             if (draw && IsMouseDown)
             {
+                //pb_imgDisplay.Image = imgMain.ToBitmap();
                 IsMouseDown = false;
                 btn_saveSingle.Enabled = true;
                 btn_saveSingle.PerformClick();
@@ -219,23 +233,24 @@ namespace Brush_Tool
         {
             this.Focus();
             pictureBoxGraphics = pb_imgDisplay.CreateGraphics();
+            timer1.Start();
         }
 
         private void checkRadioButtonStatus()
         {
             if (rb_lowCrack.Checked)
             {
-                nud_brushSize.Value = 3;
+                nud_brushSize.Value = 4;
                 drawingPen = new Pen(Color.Green, (int)nud_brushSize.Value);
             }
             else if (rb_modCrack.Checked)
             {
-                nud_brushSize.Value = 4;
+                nud_brushSize.Value = 5;
                 drawingPen = new Pen(Color.Yellow, (int)nud_brushSize.Value);
             }
             else if (rb_highCrack.Checked)
             {
-                nud_brushSize.Value = 5;
+                nud_brushSize.Value = 6;
                 drawingPen = new Pen(Color.Red, (int)nud_brushSize.Value);
             }
         }
@@ -370,6 +385,9 @@ namespace Brush_Tool
                 case 'c':
                     rb_highCrack.Checked = true;
                     break;
+                case 't':
+                    btn_ReadAnnot.PerformClick();
+                    break;
             }
         }
 
@@ -423,6 +441,16 @@ namespace Brush_Tool
                         lastSetPoints.RemoveAt(yoloText.Count - 1);
                     }
                     pb_imgDisplay.Image = imgMain.ToBitmap();
+                    if (btn_ReadAnnot.Text == "Polygon On")
+                    {
+                        btn_ReadAnnot.PerformClick();
+                        Thread.Sleep(100);
+                        btn_ReadAnnot.PerformClick();
+                    }
+                    else if (btn_ReadAnnot.Text == "Polygon Off")
+                    {
+                        btn_ReadAnnot.PerformClick();
+                    }
                 }
                 catch (Exception exc) 
                 {
@@ -459,7 +487,6 @@ namespace Brush_Tool
 
                         OpenCvSharp.Point[] pointsArray = pointsList.ToArray();
                         ListOfListOfPoint.Add(pointsList);
-                        // Draw polyline
                         if (classID == 0)
                             Cv2.Polylines(imgMain, ListOfListOfPoint, true, Scalar.Green, 1);
                         else if (classID == 1)
@@ -478,6 +505,17 @@ namespace Brush_Tool
                 btn_ReadAnnot.BackColor = Color.Red;
                 pb_imgDisplay.Image = imgMainCopy.ToBitmap();
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            timer1.Stop();
+            Application.Exit();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            btn_saveFinalText.PerformClick();
         }
     }
 }

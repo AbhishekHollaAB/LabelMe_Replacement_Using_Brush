@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.rb_lowCrack = new System.Windows.Forms.RadioButton();
             this.rb_modCrack = new System.Windows.Forms.RadioButton();
             this.rb_highCrack = new System.Windows.Forms.RadioButton();
@@ -59,6 +60,9 @@
             this.btn_ReadAnnot = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.label3 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.cb_saveMask = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pb_imgDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_brushSize)).BeginInit();
             this.panel1.SuspendLayout();
@@ -195,7 +199,7 @@
             this.nud_brushSize.TabIndex = 15;
             this.nud_brushSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.nud_brushSize.Value = new decimal(new int[] {
-            3,
+            4,
             0,
             0,
             0});
@@ -411,11 +415,39 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Times New Roman", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(1215, 273);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(10, 15);
+            this.label3.TabIndex = 42;
+            this.label3.Text = "t";
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 120000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // cb_saveMask
+            // 
+            this.cb_saveMask.AutoSize = true;
+            this.cb_saveMask.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_saveMask.Location = new System.Drawing.Point(1115, 788);
+            this.cb_saveMask.Name = "cb_saveMask";
+            this.cb_saveMask.Size = new System.Drawing.Size(147, 21);
+            this.cb_saveMask.TabIndex = 43;
+            this.cb_saveMask.Text = "Save Binary Mask";
+            this.cb_saveMask.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1307, 923);
+            this.Controls.Add(this.cb_saveMask);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btn_ReadAnnot);
             this.Controls.Add(this.tb_Status);
@@ -447,7 +479,8 @@
             this.KeyPreview = true;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Brush to YOLO Converter";
+            this.Text = "Brush to YOLO Converter - v2.6";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pb_imgDisplay)).EndInit();
@@ -491,6 +524,9 @@
         private System.Windows.Forms.Button btn_ReadAnnot;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.CheckBox cb_saveMask;
     }
 }
 
