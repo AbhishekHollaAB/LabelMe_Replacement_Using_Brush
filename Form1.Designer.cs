@@ -62,7 +62,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label3 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.cb_saveMask = new System.Windows.Forms.CheckBox();
+            this.btn_selectPolygon = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pb_imgDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_brushSize)).BeginInit();
             this.panel1.SuspendLayout();
@@ -430,23 +430,24 @@
             this.timer1.Interval = 120000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // cb_saveMask
+            // btn_selectPolygon
             // 
-            this.cb_saveMask.AutoSize = true;
-            this.cb_saveMask.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cb_saveMask.Location = new System.Drawing.Point(1115, 788);
-            this.cb_saveMask.Name = "cb_saveMask";
-            this.cb_saveMask.Size = new System.Drawing.Size(147, 21);
-            this.cb_saveMask.TabIndex = 43;
-            this.cb_saveMask.Text = "Save Binary Mask";
-            this.cb_saveMask.UseVisualStyleBackColor = true;
+            this.btn_selectPolygon.Enabled = false;
+            this.btn_selectPolygon.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_selectPolygon.Location = new System.Drawing.Point(1077, 748);
+            this.btn_selectPolygon.Name = "btn_selectPolygon";
+            this.btn_selectPolygon.Size = new System.Drawing.Size(195, 52);
+            this.btn_selectPolygon.TabIndex = 43;
+            this.btn_selectPolygon.Text = "Select Polygon";
+            this.btn_selectPolygon.UseVisualStyleBackColor = true;
+            this.btn_selectPolygon.Click += new System.EventHandler(this.btn_selectPolygon_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1307, 923);
-            this.Controls.Add(this.cb_saveMask);
+            this.Controls.Add(this.btn_selectPolygon);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btn_ReadAnnot);
@@ -526,7 +527,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.CheckBox cb_saveMask;
+        private System.Windows.Forms.Button btn_selectPolygon;
     }
 }
 

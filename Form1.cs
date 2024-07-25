@@ -29,6 +29,8 @@ namespace Brush_Tool
         int idx = 0;
         int actualX = 0;
         int actualY = 0;
+        int polygonX = 0;
+        int polygonY = 0;
 
         List<string> yoloText = new List<string>();
         string[] folderContents;
@@ -37,8 +39,10 @@ namespace Brush_Tool
 
         bool draw = true;
         bool IsMouseDown = false;
+        bool forPolygon = false;
 
         OpenCvSharp.Point StartLocation;
+        OpenCvSharp.Point polygonPoint;
         List<OpenCvSharp.Point[]> lastSetPoints = new List<OpenCvSharp.Point[]>();
 
         Pen drawingPen;
@@ -76,7 +80,7 @@ namespace Brush_Tool
                 pb_imgDisplay.SizeMode = PictureBoxSizeMode.AutoSize;
             }
         }
-        
+
         private void btn_previous_Click(object sender, EventArgs e)
         {
             if (idx > 0)
@@ -141,6 +145,7 @@ namespace Brush_Tool
                 btn_ReadAnnot.BackColor = Color.Red;
                 tb_saveStatus.Clear();
                 tb_saveStatus.BackColor = Color.White;
+                //btn_ReadAnnot.PerformClick();
                 
                 imgMain = new Mat(folderContents[idx]);
                 imgMain.CopyTo(imgMainCopy);
@@ -158,6 +163,39 @@ namespace Brush_Tool
                 if (IsMouseDown == false)
                     IsMouseDown = true;
                 StartLocation = new OpenCvSharp.Point(e.X, e.Y);
+            }
+            if (forPolygon)
+            {
+                polygonPoint = new OpenCvSharp.Point(e.X, e.Y);
+                double scaleX = (double)imgMain.Width / pb_imgDisplay.Size.Width;
+                double scaleY = (double)imgMain.Height / pb_imgDisplay.Size.Height;
+                polygonX = (int)(e.X * scaleX);
+                polygonY = (int)(e.Y * scaleY);
+
+                List<string> linesToKeep = new List<string>();
+                string[] lines = File.ReadAllLines(folderBrowserDialog1.SelectedPath + "\\" + outFilename + ".txt");
+                foreach (string line in lines)
+                {
+                    string[] values = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    int classID = int.Parse(values[0]);
+                    values = values.Skip(1).ToArray();
+                    List<OpenCvSharp.Point> allPointsIn = new List<OpenCvSharp.Point>();
+
+                    for (int i = 0; i < values.Length; i += 2)
+                    {
+                        int xVal = (int)(Convert.ToDouble(values[i]) * imgMain.Width);
+                        int yVal = (int)(Convert.ToDouble(values[i + 1]) * imgMain.Height);
+                        allPointsIn.Add(new OpenCvSharp.Point(xVal, yVal));
+                    }
+
+                    OpenCvSharp.Point testPoint = new OpenCvSharp.Point(polygonX, polygonY);
+                    bool isInside = PolygonHelper.IsPointInside(testPoint, allPointsIn);
+                    if (!isInside)
+                    {
+                        linesToKeep.Add(line);
+                    }
+                }
+                File.WriteAllLines(folderBrowserDialog1.SelectedPath + "\\" + outFilename + ".txt", linesToKeep);
             }
         }
 
@@ -183,8 +221,6 @@ namespace Brush_Tool
                         Cv2.Circle(imgMain, new OpenCvSharp.Point(actualX, actualY), (int)nud_brushSize.Value, Scalar.Red, -1);
 
                     Cv2.Circle(blackImg, new OpenCvSharp.Point(actualX, actualY), (int)nud_brushSize.Value, Scalar.White, -1);
-                    if (cb_saveMask.Checked)
-                        Cv2.Circle(binaryMask, new OpenCvSharp.Point(actualX, actualY), (int)nud_brushSize.Value, Scalar.White, -1);
                     pb_imgDisplay.Image = imgMain.ToBitmap();
                     pb_imgDisplay.Invalidate();
                     GC.Collect();
@@ -216,6 +252,7 @@ namespace Brush_Tool
             {
                 draw = true;
                 btn_Brush.BackColor = Color.Green;
+                forPolygon = false;
             }
             else
             {
@@ -402,7 +439,8 @@ namespace Brush_Tool
                     btn_browseFolder.Enabled = true;
                     btn_Brush.Enabled = true;
                     btn_saveFinalText.Enabled = true;
-                    btn_removeRecent.Enabled = true;
+                    //btn_removeRecent.Enabled = true;
+                    btn_selectPolygon.Enabled = true;
                 }
                 else
                 {
@@ -411,7 +449,8 @@ namespace Brush_Tool
                     btn_browseFolder.Enabled = false;
                     btn_Brush.Enabled = false;
                     btn_saveFinalText.Enabled = false;
-                    btn_removeRecent.Enabled = false;
+                    //btn_removeRecent.Enabled = false;
+                    btn_selectPolygon.Enabled = false;
                 }
             }
             catch (Exception exc)
@@ -501,6 +540,7 @@ namespace Brush_Tool
             }
             else if (btn_ReadAnnot.Text == "Polygon On")
             {
+                imgMainCopy.CopyTo(imgMain);
                 btn_ReadAnnot.Text = "Polygon Off";
                 btn_ReadAnnot.BackColor = Color.Red;
                 pb_imgDisplay.Image = imgMainCopy.ToBitmap();
@@ -516,6 +556,69 @@ namespace Brush_Tool
         private void timer1_Tick(object sender, EventArgs e)
         {
             btn_saveFinalText.PerformClick();
+        }
+
+        private void btn_selectPolygon_Click(object sender, EventArgs e)
+        {
+            btn_Brush.PerformClick();
+            forPolygon = true;
+        }
+    }
+
+    public class PolygonHelper
+    {
+        public static bool IsPointInside(OpenCvSharp.Point p, List<OpenCvSharp.Point> vertices)
+        {
+            int count = 0;
+            int n = vertices.Count;
+
+            for (int i = 0; i < n; i++)
+            {
+                OpenCvSharp.Point v1 = vertices[i];
+                OpenCvSharp.Point v2 = vertices[(i + 1) % n];
+
+                if (IsIntersecting(p, v1, v2))
+                {
+                    count++;
+                }
+            }
+
+            return (count % 2 == 1);
+        }
+
+        private static bool IsIntersecting(OpenCvSharp.Point p, OpenCvSharp.Point v1, OpenCvSharp.Point v2)
+        {
+            if (v1.Y > v2.Y)
+            {
+                OpenCvSharp.Point temp = v1;
+                v1 = v2;
+                v2 = temp;
+            }
+
+            if (p.Y == v1.Y || p.Y == v2.Y)
+            {
+                p.Y += 1;
+            }
+
+            if (p.Y < v1.Y || p.Y > v2.Y)
+            {
+                return false;
+            }
+
+            if (p.X >= Math.Max(v1.X, v2.X))
+            {
+                return false;
+            }
+
+            if (p.X < Math.Min(v1.X, v2.X))
+            {
+                return true;
+            }
+
+            double slope = (double)(v2.Y - v1.Y) / (v2.X - v1.X);
+            double intersectionX = v1.X + (p.Y - v1.Y) / slope;
+
+            return p.X < intersectionX;
         }
     }
 }
