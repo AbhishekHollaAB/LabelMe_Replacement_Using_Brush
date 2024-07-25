@@ -53,16 +53,13 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.btn_removeRecent = new System.Windows.Forms.Button();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tb_Status = new System.Windows.Forms.TextBox();
             this.btn_ReadAnnot = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label3 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btn_selectPolygon = new System.Windows.Forms.Button();
+            this.btn_removePolygon = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pb_imgDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_brushSize)).BeginInit();
             this.panel1.SuspendLayout();
@@ -209,7 +206,7 @@
             // 
             this.btn_saveSingle.Enabled = false;
             this.btn_saveSingle.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_saveSingle.Location = new System.Drawing.Point(1074, 626);
+            this.btn_saveSingle.Location = new System.Drawing.Point(1074, 515);
             this.btn_saveSingle.Name = "btn_saveSingle";
             this.btn_saveSingle.Size = new System.Drawing.Size(98, 78);
             this.btn_saveSingle.TabIndex = 16;
@@ -230,7 +227,7 @@
             // 
             this.btn_saveFinalText.Enabled = false;
             this.btn_saveFinalText.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_saveFinalText.Location = new System.Drawing.Point(1176, 626);
+            this.btn_saveFinalText.Location = new System.Drawing.Point(1176, 515);
             this.btn_saveFinalText.Name = "btn_saveFinalText";
             this.btn_saveFinalText.Size = new System.Drawing.Size(96, 78);
             this.btn_saveFinalText.TabIndex = 18;
@@ -241,7 +238,7 @@
             // tb_saveStatus
             // 
             this.tb_saveStatus.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tb_saveStatus.Location = new System.Drawing.Point(1077, 710);
+            this.tb_saveStatus.Location = new System.Drawing.Point(1077, 599);
             this.tb_saveStatus.Name = "tb_saveStatus";
             this.tb_saveStatus.ReadOnly = true;
             this.tb_saveStatus.Size = new System.Drawing.Size(195, 32);
@@ -335,48 +332,11 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Times New Roman", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(1251, 689);
+            this.label11.Location = new System.Drawing.Point(1251, 578);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(11, 15);
             this.label11.TabIndex = 34;
             this.label11.Text = "s";
-            // 
-            // btn_removeRecent
-            // 
-            this.btn_removeRecent.Enabled = false;
-            this.btn_removeRecent.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_removeRecent.Location = new System.Drawing.Point(1097, 514);
-            this.btn_removeRecent.Name = "btn_removeRecent";
-            this.btn_removeRecent.Size = new System.Drawing.Size(171, 45);
-            this.btn_removeRecent.TabIndex = 36;
-            this.btn_removeRecent.Text = "Remove Recent";
-            this.btn_removeRecent.UseVisualStyleBackColor = true;
-            this.btn_removeRecent.Click += new System.EventHandler(this.btn_removeRecent_Click);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Times New Roman", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(1139, 544);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(11, 15);
-            this.label12.TabIndex = 37;
-            this.label12.Text = "r";
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.Color.IndianRed;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.textBox1.Location = new System.Drawing.Point(1132, 575);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(107, 45);
-            this.textBox1.TabIndex = 38;
-            this.textBox1.Text = "DO NOT CLICK THIS TWICE IN A ROW";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tb_Status
             // 
@@ -430,31 +390,28 @@
             this.timer1.Interval = 120000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // btn_selectPolygon
+            // btn_removePolygon
             // 
-            this.btn_selectPolygon.Enabled = false;
-            this.btn_selectPolygon.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_selectPolygon.Location = new System.Drawing.Point(1077, 748);
-            this.btn_selectPolygon.Name = "btn_selectPolygon";
-            this.btn_selectPolygon.Size = new System.Drawing.Size(195, 52);
-            this.btn_selectPolygon.TabIndex = 43;
-            this.btn_selectPolygon.Text = "Select Polygon";
-            this.btn_selectPolygon.UseVisualStyleBackColor = true;
-            this.btn_selectPolygon.Click += new System.EventHandler(this.btn_selectPolygon_Click);
+            this.btn_removePolygon.Enabled = false;
+            this.btn_removePolygon.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_removePolygon.Location = new System.Drawing.Point(1077, 637);
+            this.btn_removePolygon.Name = "btn_removePolygon";
+            this.btn_removePolygon.Size = new System.Drawing.Size(195, 52);
+            this.btn_removePolygon.TabIndex = 43;
+            this.btn_removePolygon.Text = "Remove Polygon";
+            this.btn_removePolygon.UseVisualStyleBackColor = true;
+            this.btn_removePolygon.Click += new System.EventHandler(this.btn_selectPolygon_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1307, 923);
-            this.Controls.Add(this.btn_selectPolygon);
+            this.Controls.Add(this.btn_removePolygon);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btn_ReadAnnot);
             this.Controls.Add(this.tb_Status);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.btn_removeRecent);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -480,7 +437,7 @@
             this.KeyPreview = true;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Brush to YOLO Converter - v2.6";
+            this.Text = "Brush to YOLO Converter - v2.8";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
@@ -518,16 +475,13 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Button btn_removeRecent;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox tb_Status;
         private System.Windows.Forms.Button btn_ReadAnnot;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Button btn_selectPolygon;
+        private System.Windows.Forms.Button btn_removePolygon;
     }
 }
 

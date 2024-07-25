@@ -196,6 +196,8 @@ namespace Brush_Tool
                     }
                 }
                 File.WriteAllLines(folderBrowserDialog1.SelectedPath + "\\" + outFilename + ".txt", linesToKeep);
+                btn_ReadAnnot.PerformClick();
+                btn_ReadAnnot.PerformClick();
             }
         }
 
@@ -410,9 +412,6 @@ namespace Brush_Tool
                 case 's':
                     btn_saveFinalText.PerformClick();
                     break;
-                case 'r':
-                    btn_removeRecent.PerformClick();
-                    break;
                 case 'z':
                     rb_lowCrack.Checked = true;
                     break;
@@ -439,8 +438,7 @@ namespace Brush_Tool
                     btn_browseFolder.Enabled = true;
                     btn_Brush.Enabled = true;
                     btn_saveFinalText.Enabled = true;
-                    //btn_removeRecent.Enabled = true;
-                    btn_selectPolygon.Enabled = true;
+                    btn_removePolygon.Enabled = true;
                 }
                 else
                 {
@@ -449,55 +447,13 @@ namespace Brush_Tool
                     btn_browseFolder.Enabled = false;
                     btn_Brush.Enabled = false;
                     btn_saveFinalText.Enabled = false;
-                    //btn_removeRecent.Enabled = false;
-                    btn_selectPolygon.Enabled = false;
+                    btn_removePolygon.Enabled = false;
                 }
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
             }
-        }
-
-        private void btn_removeRecent_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete the previous annotation?", "Warning!", MessageBoxButtons.OKCancel);
-            if (result == DialogResult.OK)
-            {
-                try
-                {
-                    if (yoloText.Count > 0)
-                    {
-                        foreach (var singlePoint in lastSetPoints[yoloText.Count - 1])
-                        {
-                            int X = singlePoint.X;
-                            int Y = singlePoint.Y;
-
-                            Vec3b pixelValue = imgMainCopy.Get<Vec3b>(Y, X);
-                            imgMain.Set(Y, X, new Vec3b(0, 0, 0));
-                        }
-                        yoloText.RemoveAt(yoloText.Count - 1);
-                        lastSetPoints.RemoveAt(yoloText.Count - 1);
-                    }
-                    pb_imgDisplay.Image = imgMain.ToBitmap();
-                    if (btn_ReadAnnot.Text == "Polygon On")
-                    {
-                        btn_ReadAnnot.PerformClick();
-                        Thread.Sleep(100);
-                        btn_ReadAnnot.PerformClick();
-                    }
-                    else if (btn_ReadAnnot.Text == "Polygon Off")
-                    {
-                        btn_ReadAnnot.PerformClick();
-                    }
-                }
-                catch (Exception exc) 
-                {
-                    MessageBox.Show(exc.Message);
-                }
-            }
-            else
-            { }
         }
 
         private void btn_ReadAnnot_Click(object sender, EventArgs e)
